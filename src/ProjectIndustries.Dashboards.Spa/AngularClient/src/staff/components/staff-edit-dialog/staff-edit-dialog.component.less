@@ -1,0 +1,41 @@
+.MemberList {
+  &-searchBarWrap {
+    position: relative;
+
+    &:after {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      right: 17px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: url(../../../assets/icons/search-regular.svg) center no-repeat;
+    }
+  }
+
+  &-searchBar {
+    background: #EDEDED;
+    border-radius: 10px;
+    width: 100%;
+    border: none;
+    padding: 11px 46px 11px 17px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 14px;
+
+    &::-webkit-input-placeholder {
+      color: #888888;
+    }
+  }
+
+  &-memberList {
+    margin-top: 15px;
+    min-height: 200px;
+  }
+
+  &-member {
+    position: relative;
+    z-index: 1;
+  }
+}

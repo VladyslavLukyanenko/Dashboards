@@ -1,0 +1,20 @@
+<div class="StaffMember-avatarWrap">
+  <img [src]="member.avatar" [alt]="member.name" class="StaffMember-pic">
+</div>
+<div class="StaffMember-name">
+  <span class="StaffMember-fname">{{member.name}}</span>
+  <span class="StaffMember-discordName">@{{member.name}}#{{member.discriminator}}</span>
+</div>
+<div class="StaffMember-roleSelectWrap">
+  <p-dropdown
+    (ngModelChange)="selectedRoleChange.emit($event)"
+    [showClear]="true"
+    [ngModel]="selectedRole"
+    class="StaffMember-roleSelect"
+    [class.is-selected]="isSelected"
+    placeholder="Role"
+    optionLabel="key"
+    optionValue="value"
+    [options]="roles"
+  ></p-dropdown>
+</div>

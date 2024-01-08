@@ -1,0 +1,293 @@
+<ng-container *ngIf="true">
+
+  <header class="Page-header SettingsPage-header">
+    <h1 class="Page-title">Settings</h1>
+  </header>
+
+  <div class="SettingsPage-content Page-content">
+    <form (ngSubmit)="save()" [formGroup]="form" class="row">
+      <div class="col-xl-9 col-md-8 mb-3 mb-sm-0">
+        <div class="row">
+          <div class="col-12 SettingsPage-section">
+            <div class="ContentSection mb-4">
+              <header class="ContentSection-header SettingsPage-sectionTitle">
+                <h2 class="ContentSection-title">General information</h2>
+              </header>
+
+              <div class="ContentSection-content SettingsPage-sectionContent">
+                <div class="row AppForm-row no-gutters">
+                  <div class="col-12 AppForm-col">
+                    <div class="AppForm-field p-field LabeledItem">
+                      <label class="LabeledItem-title">Background and Logo</label>
+                      <div class="BackgroundEditor">
+                        <div class="BackgroundEditor-backgroundWrap">
+                          <img
+                            *ngIf="((changedBg$ | async) || form.customBackgroundSrcCtrl.value) as bgPic"
+                            [src]="bgPic"
+                            class="BackgroundEditor-background">
+                          <span class="BackgroundEditor-backgroundLabel BackgroundEditor-label">Background</span>
+                          <a
+                            (fileSelected)="cropBgDialogData$.next($event.content)"
+                            appFileUpload
+                            href="#"
+                            formGroupName="uploadedCustomBackgroundSrc"
+                            class="BackgroundEditor-editBtn BackgroundEditor-bgEditBtn"
+                          >
+                            Edit
+                          </a>
+                        </div>
+
+                        <div class="BackgroundEditor-logoUploadBtn">
+                          <img
+                            *ngIf="((changedLogo$ | async) || form.logoSrcCtrl.value) as logoPic"
+                            [src]="logoPic"
+                            class="BackgroundEditor-logo">
+                          <span class="BackgroundEditor-logoLabel BackgroundEditor-label">Logo</span>
+                          <a
+                            (fileSelected)="cropLogoDialogData$.next($event.content)"
+                            formGroupName="uploadedLogoSrc"
+                            appFileUpload
+                            href="#"
+                            class="BackgroundEditor-editBtn BackgroundEditor-logoEditBtn"
+                          >
+                            Edit
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row AppForm-row no-gutters">
+                  <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                    <div class="AppForm-field p-field LabeledItem">
+                      <label class="LabeledItem-title">Dashboard Name</label>
+                      <input formControlName="name" class="AppForm-control" placeholder="Dashboard Name">
+                      <app-field-error-required [control]="form.nameCtrl"></app-field-error-required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                    <div class="AppForm-field p-field LabeledItem">
+                      <label class="LabeledItem-title">Timezone</label>
+                      <p-dropdown
+                        class="AppForm-control"
+                        [options]="timeZones$ | async"
+                        formControlName="timeZoneId"
+                        optionValue="id"
+                        optionLabel="name"
+                        placeholder="Timezone"
+                        [autoDisplayFirst]="false"
+                        appendTo="body"
+                      ></p-dropdown>
+                      <app-field-error-required [control]="form.timeZoneIdCtrl"></app-field-error-required>
+                    </div>
+                  </div>
+                </div>
+                <div class="row AppForm-row no-gutters">
+                  <div class="col-12 AppForm-col">
+                    <div class="AppForm-field p-field LabeledItem">
+                      <label class="LabeledItem-title">
+                        Chargebackers Export
+                        <p-inputSwitch
+                          formControlName="chargeBackersExportEnabled"
+                          class="AppForm-control"
+                        ></p-inputSwitch>
+
+                        <svg height="18" width="18" style="margin-left: 10px;" class="HelpBtn">
+                          <use href="#help"></use>
+                        </svg>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <header class="ContentSection-header SettingsPage-sectionTitle">
+                  <h2 class="ContentSection-title">
+                    Hosting information
+                  </h2>
+                </header>
+                <div formGroupName="hostingConfig" class="row AppForm-row no-gutters">
+                  <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                    <div class="LabeledItem AppForm-field p-field">
+                      <div class="LabeledItem-title">Domain Name</div>
+                      <input formControlName="domainName" class="AppForm-control" placeholder="Domain Name">
+
+                      <app-field-error-required
+                        [control]="form.hostingConfigCtrl.domainNameCtrl"
+                      ></app-field-error-required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-12 AppForm-col">
+                    <div class="LabeledItem AppForm-field p-field">
+                      <div class="LabeledItem-title">Mode</div>
+                      <p-dropdown
+                        class="AppForm-control"
+                        [options]="hostingModes"
+                        formControlName="mode"
+                        optionValue="value"
+                        optionLabel="key"
+                        placeholder="Mode"
+                        [autoDisplayFirst]="false"
+                        appendTo="body"
+                      ></p-dropdown>
+                      <app-field-error-required
+                        [control]="form.hostingConfigCtrl.modeCtrl"
+                      ></app-field-error-required>
+                    </div>
+                  </div>
+                </div>
+
+
+                <header class="ContentSection-header SettingsPage-sectionTitle">
+                  <h2 class="ContentSection-title">Discord information</h2>
+                </header>
+                <div formGroupName="discordConfig" class="ContentSection-content SettingsPage-sectionContent">
+                  <div class="row AppForm-row no-gutters">
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                      <div class="AppForm-field p-field LabeledItem">
+                        <label class="LabeledItem-title">Guid ID</label>
+                        <input formControlName="guildId" class="AppForm-control" placeholder="Guid ID">
+                        <app-field-error-required
+                          [control]="form.discordConfigCtrl.guildIdCtrl"
+                        ></app-field-error-required>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                      <div class="AppForm-field p-field LabeledItem">
+                        <label class="LabeledItem-title">Access Token</label>
+                        <input formControlName="accessToken" class="AppForm-control" placeholder="Access Token">
+                        <app-field-error-required
+                          [control]="form.discordConfigCtrl.accessTokenCtrl"
+                        ></app-field-error-required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row AppForm-row no-gutters">
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                      <div class="AppForm-field p-field LabeledItem">
+                        <label class="LabeledItem-title">Bot Access Token</label>
+                        <input formControlName="botAccessToken" class="AppForm-control" placeholder="Bot Access Token">
+                        <app-field-error-required
+                          [control]="form.discordConfigCtrl.botAccessTokenCtrl"
+                        ></app-field-error-required>
+                      </div>
+                    </div>
+                    <div formGroupName="oAuthConfig" class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                      <div class="AppForm-field p-field LabeledItem">
+                        <label class="LabeledItem-title">Authorize URL</label>
+                        <input formControlName="authorizeUrl" class="AppForm-control" placeholder="Authorize URL">
+                        <app-field-error-required
+                          [control]="form.discordConfigCtrl.oAuthConfigCtrl.authorizeUrlCtrl"
+                        ></app-field-error-required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-container formGroupName="oAuthConfig">
+                    <div class="row AppForm-row no-gutters">
+                      <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                        <div class="AppForm-field p-field LabeledItem">
+                          <label class="LabeledItem-title">Client ID</label>
+                          <input formControlName="clientId" class="AppForm-control" placeholder="Client ID">
+                          <app-field-error-required
+                            [control]="form.discordConfigCtrl.oAuthConfigCtrl.clientIdCtrl"
+                          ></app-field-error-required>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                        <div class="AppForm-field p-field LabeledItem">
+                          <label class="LabeledItem-title">Client Secret</label>
+                          <input formControlName="clientSecret" class="AppForm-control" placeholder="Client Secret">
+                          <app-field-error-required
+                            [control]="form.discordConfigCtrl.oAuthConfigCtrl.clientSecretCtrl"
+                          ></app-field-error-required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row AppForm-row no-gutters">
+                      <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                        <div class="AppForm-field p-field LabeledItem">
+                          <label class="LabeledItem-title">Redicrect URL</label>
+                          <input formControlName="redirectUrl" class="AppForm-control" placeholder="Redirect URL">
+                          <app-field-error-required
+                            [control]="form.discordConfigCtrl.oAuthConfigCtrl.redirectUrlCtrl"
+                          ></app-field-error-required>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                        <div class="AppForm-field p-field LabeledItem">
+                          <label class="LabeledItem-title">Scope</label>
+                          <input formControlName="scope" class="AppForm-control" placeholder="Scope">
+                          <app-field-error-required
+                            [control]="form.discordConfigCtrl.oAuthConfigCtrl.scopeCtrl"
+                          ></app-field-error-required>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+
+                <header class="ContentSection-header SettingsPage-sectionTitle">
+                  <h2 class="ContentSection-title">Payment information</h2>
+                </header>
+                <div formGroupName="stripeConfig" class="ContentSection-content SettingsPage-sectionContent">
+                  <div class="row AppForm-row no-gutters">
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                      <div class="AppForm-field p-field LabeledItem">
+                        <label class="LabeledItem-title">API Key</label>
+                        <input formControlName="apiKey" class="AppForm-control" placeholder="API Key">
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-12 mb-4 mb-sm-0 AppForm-col">
+                      <div class="AppForm-field p-field LabeledItem">
+                        <label class="LabeledItem-title">Webhook Secret String</label>
+                        <input
+                          formControlName="webHookEndpointSecret"
+                          class="AppForm-control"
+                          placeholder="Webhook Secret String">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-4 SettingsPage-section">
+        <div class="ContentSection">
+          <header class="ContentSection-header">
+            <h2 class="ContentSection-title">Actions</h2>
+          </header>
+
+          <div class="ContentSection-content SettingsPage-sectionContent">
+            <button class="Button is-block is-primary">
+              Save settings
+            </button>
+            <button (click)="resetSettings()" type="button" class="Button is-block is-danger is-outlined">
+              Clear settings
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<app-image-crop-dialog
+  *ngIf="cropLogoDialogData$ | async as data"
+  (isVisibleChange)="cropLogoDialogData$.next(null)"
+  (cropped)="saveLogoCropChanges($event)"
+  [isVisible]="!!data"
+  [aspectRatio]="1"
+  [cropImageUrl]="data"
+></app-image-crop-dialog>
+
+
+<app-image-crop-dialog
+  *ngIf="cropBgDialogData$ | async as data"
+  (isVisibleChange)="cropBgDialogData$.next(null)"
+  (cropped)="saveBgCropChanges($event)"
+  [isVisible]="!!data"
+  [aspectRatio]="700 / 240"
+  [cropImageUrl]="data"
+></app-image-crop-dialog>

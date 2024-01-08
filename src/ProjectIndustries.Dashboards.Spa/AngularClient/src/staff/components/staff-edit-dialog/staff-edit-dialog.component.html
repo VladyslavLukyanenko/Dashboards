@@ -1,0 +1,42 @@
+<p-dialog
+  (visibleChange)="isVisibleChange.emit($event)"
+  [visible]="isVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  styleClass="AppDialog"
+  class="dialogHeaderIconless"
+>
+  <ng-template pTemplate="header">
+    <div class="AppDialog-header">
+      <h2 class="AppDialog-title">Add Staff Member</h2>
+    </div>
+  </ng-template>
+  <div class="AppDialog-content">
+    <div class="MemberList-searchBarWrap">
+      <input [formControl]="searchCtrl" type="text" class="MemberList-searchBar" placeholder="Search member">
+    </div>
+    <span *ngIf="noData$ | async" class="NoDataAlert">No members found</span>
+    <ul class="AppDialog-list RolesEditor-memberList MemberList">
+      <li *ngFor="let m of members$ | async" class="AppDialog-item has-noMarker MemberList-item">
+        <app-staff-member-list-item
+          (selectedRoleChange)="toggleAssigningMember(m, $event)"
+          [member]="m"
+          [selectedRole]="m.selectedRole"
+          [isSelected]="!!m.selectedRole"
+          [roles]="roles"
+          class="MemberList-member"
+        ></app-staff-member-list-item>
+      </li>
+    </ul>
+  </div>
+
+  <p-footer>
+    <button
+      (click)="assignRoles()"
+      [disabled]="!assignedMembers.length || (isLoading$ | async)"
+      class="AppDialog-btn is-primary"
+    >
+      Add Staff Member
+    </button>
+  </p-footer>
+</p-dialog>
